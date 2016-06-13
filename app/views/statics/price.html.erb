@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Price Page</title>
+
+    <script type='application/javascript' src='https://l2.io/ip.js?var=userip'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'></script>
+
+    <script>
+      var loadDatetime;
+      var userId;
+
+      $(window).load(function() {
+        loadDatetime = new Date().toISOString();
+        userId = CryptoJS.SHA256(userip);
+
+        UserAccess.set();
+      });
+
+      (function(window) {
+        'use strict';
+
+        // LIBRARY - BEGIN
+        function define_library() {
+          var UserAccess = {};
+          var url;
+          var dateTime;
+          var page;
+          var infos_hash;
+          var infos_array;
+          var updated_infos;
+
+          UserAccess.set = function() {
+            // Access infos
+            url = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname;
+            dateTime = loadDatetime;
+            page = 'Price';
+
+            infos_hash = { token: userId.toString(), url: url, dateTime: dateTime, page: page };
+            infos_array = jQuery.parseJSON(localStorage.getItem(userId.toString()));
+
+            if (infos_array) {
+              infos_array.push(infos_hash);
+              updated_infos = infos_array;
+            } else {
+              updated_infos = [infos_hash];
+            }
+
+            localStorage.setItem(userId.toString(), JSON.stringify(updated_infos));
+          }
+
+          UserAccess.get = function() {
+            // return jQuery.parseJSON(localStorage.getItem(userId.toString()));
+          }
+
+          return UserAccess;
+        }
+        // LIBRARY - END
+
+        // Define globally if it does not already exist
+        if(typeof(UserAccess) === 'undefined') {
+          window.UserAccess = define_library();
+        } else {
+          console.log("UserAccess already defined.");
+        }
+      })(window);
+    </script>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <h1>This is the price page!</h1>
+      <br/>
+
+      <a href="/statics/home">Let's go to the Home Page</a>
+      <br/>
+      <a href="/users/new">Let's go to the Contact Page</a>
+      <br/>
+      <!-- <a href="javascript:void(0);" onclick="UserAccess.set();">Register Info</a> -->
+    </div>
+  </body>
+</html>
