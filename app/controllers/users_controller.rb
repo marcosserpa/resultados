@@ -20,7 +20,7 @@ class UsersController < ApplicationController
     # counter = 0
 
     # pages.each do |page|
-    pages.each_with_index.map do |page, index|
+    params[:user][:pages].each_with_index.map do |page, index|
       # @user.pages.create(url: page["input_#{ counter }_url"], date_time: page["input_#{ counter }_dateTime"], page: page["input_#{ counter }_page"]) unless previous == page["input_#{ counter }_page"]
       @user.pages.create(url: page["input_#{ index }_url"], date_time: page["input_#{ index }_dateTime"], page: page["input_#{ index }_page"]) unless previous == page["input_#{ index }_page"]
 
@@ -29,7 +29,6 @@ class UsersController < ApplicationController
     end
 
     @pages = Page.create(user_params[:pages])
-
     respond_to do |format|
       if @user.save
         format.html { redirect_to statics_thanks_path, clear_storage: "localStorage.clear();" }
