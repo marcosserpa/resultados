@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Home Page</title>
+
+    <script type='application/javascript' src='https://l2.io/ip.js?var=userip'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'></script>
+
+    <script>
+      var loadDatetime;
+      var userId;
+
+      $(window).load(function() {
+        loadDatetime = new Date().toISOString();
+        userId = CryptoJS.SHA256(userip);
+
+        localStorage.setItem('userId', userId);
+      });
+
+      (function(window) {
+        'use strict';
+
+        // LIBRARY - BEGIN
+        function define_library() {
+          var UserAccess = {};
+          var url;
+          var dateTime;
+          var page;
+          var infos_hash;
+          var user_infos;
+          var updated_infos;
+
+          UserAccess.set = function() {
+            // Access infos
+            url = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname;
+            dateTime = loadDatetime;
+            page = 'Home';
+
+            infos_hash = [{ token: userId.toString(), url: url, dateTime: dateTime, page: page }];
+            user_infos = localStorage.getItem(userId);
+
+            debugger;
+
+            if (user_infos) {
+              updated_infos = user_infos.concat(infos_hash);
+            } else {
+              user_infos = [];
+              updated_infos = user_infos.concat(infos_hash);
+            }
+
+            localStorage.setItem(userId, updated_infos);
+          }
+
+          UserAccess.get = function() {
+            localStorage.getItem(userId);
+          }
+
+          return UserAccess;
+        }
+        // LIBRARY - END
+
+        // Define globally if it does not already exist
+        if(typeof(UserAccess) === 'undefined') {
+          window.UserAccess = define_library();
+        } else {
+          console.log("UserAccess already defined.");
+        }
+      })(window);
+    </script>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <h1>This is the home page!</h1>
+      <br/>
+
+      <a href="/statics/price">Let's go to Price Page</a>
+      <br/>
+      <a href="/users/new">Let's go to Contact Page</a>
+    </div>
+  </body>
+</html>
