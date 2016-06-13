@@ -39,8 +39,6 @@
             infos_hash = [{ token: userId.toString(), url: url, dateTime: dateTime, page: page }];
             user_infos = localStorage.getItem(userId);
 
-            debugger;
-
             if (user_infos) {
               updated_infos = user_infos.concat(infos_hash);
             } else {
