@@ -14,7 +14,7 @@
         loadDatetime = new Date().toISOString();
         userId = CryptoJS.SHA256(userip);
 
-        localStorage.setItem('userId', userId);
+        UserAccess.set();
       });
 
       (function(window) {
@@ -27,7 +27,7 @@
           var dateTime;
           var page;
           var infos_hash;
-          var user_infos;
+          var infos_array;
           var updated_infos;
 
           UserAccess.set = function() {
@@ -36,21 +36,21 @@
             dateTime = loadDatetime;
             page = 'Price';
 
-            infos_hash = [{ token: userId.toString(), url: url, dateTime: dateTime, page: page }];
-            user_infos = localStorage.getItem(userId);
+            infos_hash = { token: userId.toString(), url: url, dateTime: dateTime, page: page };
+            infos_array = jQuery.parseJSON(localStorage.getItem(userId.toString()));
 
-            if (user_infos) {
-              updated_infos = user_infos.concat(infos_hash);
+            if (infos_array) {
+              infos_array.push(infos_hash);
+              updated_infos = infos_array;
             } else {
-              user_infos = [];
-              updated_infos = user_infos.concat(infos_hash);
+              updated_infos = [infos_hash];
             }
 
-            localStorage.setItem(userId, updated_infos);
+            localStorage.setItem(userId.toString(), JSON.stringify(updated_infos));
           }
 
           UserAccess.get = function() {
-            localStorage.getItem(userId);
+            // return jQuery.parseJSON(localStorage.getItem(userId.toString()));
           }
 
           return UserAccess;
@@ -72,9 +72,11 @@
       <h1>This is the price page!</h1>
       <br/>
 
-      <a href="/statics/home">Let's go to Home Page</a>
+      <a href="/statics/home">Let's go to the Home Page</a>
       <br/>
-      <a href="/users/new">Let's go to Contact Page</a>
+      <a href="/users/new">Let's go to the Contact Page</a>
+      <br/>
+      <!-- <a href="javascript:void(0);" onclick="UserAccess.set();">Register Info</a> -->
     </div>
   </body>
 </html>

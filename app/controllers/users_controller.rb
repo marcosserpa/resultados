@@ -13,11 +13,12 @@ class UsersController < ApplicationController
   end
 
   def create
+    binding.pry
     @user = User.create(user_params)
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        format.html { redirect_to statics_thanks_path, clear_storage: "localStorage.clear();" }
       else
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }

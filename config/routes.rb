@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   get 'statics/price', to: 'statics#price'
   get 'statics/home', to: 'statics#home'
+  get 'statics/thanks', to: 'statics#thanks'
 
   resources :users do
     resources :pages

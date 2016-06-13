@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Home Page</title>
+
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'></script>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <h1>Thanks for contacting!</h1>
+      <br/>
+
+      <a href="/statics/home">Let's go to Home Page</a>
+      <br/>
+      <a href="/statics/price">Let's go to Price Page</a>
+      <br/>
+
+      <% if flash[:clear_storage] %>
+        <% binding.pry %>
+        <h3>
+          <div class="notice"><%= flash[:clear_storage] %></div>
+        </h3>
+      <% end %>
+    </div>
+  </body>
+</html>

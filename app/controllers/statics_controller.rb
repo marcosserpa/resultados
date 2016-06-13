@@ -4,4 +4,7 @@ class StaticsController < ApplicationController
 
   def price
   end
+
+  def thanks
+  end
 end
