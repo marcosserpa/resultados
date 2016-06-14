@@ -28,7 +28,7 @@
     <%= f.text_field :email %>
   </div>
   <div class="field">
-    <%= hidden_field_tag :token %>
+    <%= f.hidden_field :token %>
   </div>
   <div class="field">
     <%= hidden_field_tag :access_infos %>
@@ -58,7 +58,7 @@
     loadDatetime = new Date().toISOString();
     userId = CryptoJS.SHA256(userip);
 
-    $('#token').val(userId);
+    $('#user_token').val(userId);
 
     UserAccess.set();
     UserAccess.get();

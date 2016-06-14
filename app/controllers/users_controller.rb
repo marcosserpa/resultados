@@ -13,19 +13,18 @@ class UsersController < ApplicationController
   end
 
   def create
-    binding.pry
     @user = User.create(user_params)
 
     previous = ''
-    # counter = 0
+    number_of_records = params[:user][:pages].size / 4
+    pages = params[:user][:pages]
 
-    # pages.each do |page|
-    params[:user][:pages].each_with_index.map do |page, index|
-      # @user.pages.create(url: page["input_#{ counter }_url"], date_time: page["input_#{ counter }_dateTime"], page: page["input_#{ counter }_page"]) unless previous == page["input_#{ counter }_page"]
-      @user.pages.create(url: page["input_#{ index }_url"], date_time: page["input_#{ index }_dateTime"], page: page["input_#{ index }_page"]) unless previous == page["input_#{ index }_page"]
+    (0..(number_of_records - 1)).each do |index|
+    # params[:user][:pages].each_with_index.map do |page, index|
+      # @user.pages.create(url: page["input_#{ index }_url"], date_time: page["input_#{ index }_dateTime"], page: page["input_#{ index }_page"]) unless previous == page["input_#{ index }_page"]
+      @user.pages.create(url: pages["input_#{ index }_url"], date_time: pages["input_#{ index }_dateTime"], page: pages["input_#{ index }_page"]) unless previous == pages["input_#{ index }_page"]
 
-      previous = page["input_#{ index }_page"]
-      # counter = counter + 1
+      previous = pages["input_#{ index }_page"]
     end
 
     @pages = Page.create(user_params[:pages])
