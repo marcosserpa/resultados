@@ -1,100 +1,3 @@
-<script type='application/javascript' src='https://l2.io/ip.js?var=userip'></script>
-<script>
-  var loadDatetime;
-  var userId;
-
-  $(window).load(function() {
-    loadDatetime = new Date().toISOString();
-    userId = CryptoJS.SHA256(userip);
-
-    $('#token').val(userId);
-    UserAccess.set();
-  });
-
-  (function(window) {
-    'use strict';
-
-    // LIBRARY - BEGIN
-    function define_library() {
-      var UserAccess = {};
-      var url;
-      var dateTime;
-      var page;
-      var infos_hash;
-      var infos_array;
-      var updated_infos;
-
-      UserAccess.set = function() {
-        // Access infos
-        url = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname;
-        dateTime = loadDatetime;
-        page = 'Contact';
-
-        infos_hash = { token: userId.toString(), url: url, dateTime: dateTime, page: page };
-        infos_array = jQuery.parseJSON(localStorage.getItem(userId.toString()));
-
-        if (infos_array) {
-          infos_array.push(infos_hash);
-          updated_infos = infos_array;
-        } else {
-          updated_infos = [infos_hash];
-        }
-
-        localStorage.setItem(userId.toString(), JSON.stringify(updated_infos));
-      }
-
-      UserAccess.get = function() {
-        var form = document.forms['new_user'];
-        var infos = jQuery.parseJSON(localStorage.getItem(userId.toString()));
-        var count = 0;
-
-        infos.forEach(function(hash) {
-          var name = 'input_' + count + '_token';
-          var input_token = document.createElement('input');
-          input_token.type = 'hidden';
-          input_token.name = "user[pages][" + name + "]";
-          input_token.value = hash.token;
-
-          var name = 'input_' + count + '_url';
-          var input_url = document.createElement('input');
-          input_url.type = 'hidden';
-          input_url.name = "user[pages][" + name + "]";
-          input_url.value = hash.url;
-
-          var name = 'input_' + count + '_dateTime';
-          var input_dateTime = document.createElement('input');
-          input_dateTime.type = 'hidden';
-          input_dateTime.name = "user[pages][" + name + "]";
-          input_dateTime.value = hash.dateTime;
-
-          var name = 'input_' + count + '_page';
-          var input_page = document.createElement('input');
-          input_page.type = 'hidden';
-          input_page.name = "user[pages][" + name + "]";
-          input_page.value = hash.page;
-
-          form.appendChild(input_token);
-          form.appendChild(input_url);
-          form.appendChild(input_dateTime);
-          form.appendChild(input_page);
-
-          count += 1;
-        });
-      }
-
-      return UserAccess;
-    }
-    // LIBRARY - END
-
-    // Define globally if it does not already exist
-    if(typeof(UserAccess) === 'undefined') {
-      window.UserAccess = define_library();
-    } else {
-      console.log("UserAccess already defined.");
-    }
-  })(window);
-</script>
-
 <h1>Contact</h1>
 
 <a href="/statics/home">Let's go to the Home Page</a>
@@ -103,7 +6,7 @@
 <br/>
 <br/>
 
-<%= form_for(@user) do |f| %>
+<%= form_for @user, html: { onclick: "return UserAccess.get();", id: 'new_user' } do |f| %>
   <% if @user.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@user.errors.count, "error") %> prohibited this contact from being saved:</h2>
@@ -136,3 +39,28 @@
     <%= f.submit %>
   </div>
 <% end %>
+
+<script type='application/javascript' src='https://l2.io/ip.js?var=userip'></script>
+<script>
+  var loadDatetime;
+  var userId;
+
+  $(function() {
+    'use strict';
+
+    // Define globally if it does not already exist
+    if(typeof(UserAccess) === 'undefined') {
+      window.UserAccess = define_library();
+    } else {
+      console.log("UserAccess already defined.");
+    }
+
+    loadDatetime = new Date().toISOString();
+    userId = CryptoJS.SHA256(userip);
+
+    $('#token').val(userId);
+
+    UserAccess.set();
+    UserAccess.get();
+  });
+</script>

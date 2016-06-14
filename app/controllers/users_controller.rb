@@ -29,6 +29,7 @@ class UsersController < ApplicationController
     end
 
     @pages = Page.create(user_params[:pages])
+
     respond_to do |format|
       if @user.save
         format.html { redirect_to statics_thanks_path, clear_storage: "localStorage.clear();" }
