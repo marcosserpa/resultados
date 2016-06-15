@@ -3,7 +3,16 @@
   <head>
     <title>Home Page</title>
 
+    <script type='application/javascript' src='https://l2.io/ip.js?var=userip'></script>
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'></script>
+
+    <script>
+      $(function() {
+        'use strict';
+
+        localStorage.clear();
+      });
+    </script>
   </head>
 
   <body>
@@ -17,7 +26,6 @@
       <br/>
 
       <% if flash[:clear_storage] %>
-        <% binding.pry %>
         <h3>
           <div class="notice"><%= flash[:clear_storage] %></div>
         </h3>

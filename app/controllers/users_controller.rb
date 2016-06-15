@@ -13,25 +13,30 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.create(user_params)
+    @user = User.find_or_initialize_by(token: user_params[:token])
 
-    previous = ''
-    number_of_records = params[:user][:pages].size / 4
-    pages = params[:user][:pages]
-
-    (0..(number_of_records - 1)).each do |index|
-    # params[:user][:pages].each_with_index.map do |page, index|
-      # @user.pages.create(url: page["input_#{ index }_url"], date_time: page["input_#{ index }_dateTime"], page: page["input_#{ index }_page"]) unless previous == page["input_#{ index }_page"]
-      @user.pages.create(url: pages["input_#{ index }_url"], date_time: pages["input_#{ index }_dateTime"], page: pages["input_#{ index }_page"]) unless previous == pages["input_#{ index }_page"]
-
-      previous = pages["input_#{ index }_page"]
+    if @user.new_record?
+      @user.email = user_params[:email]
+      @user.name = user_params[:name]
     end
 
-    @pages = Page.create(user_params[:pages])
+    if !@user.new_record? || @user.save
+      previous = !@user.pages.blank? ? @user.pages.last.page : ''
+      pages = params[:user][:pages]
+      number_of_records = pages.size / 4
+
+      (0..(number_of_records - 1)).each do |index|
+        @user.pages.create(url: pages["input_#{ index }_url"], date_time: pages["input_#{ index }_dateTime"], page: pages["input_#{ index }_page"]) unless previous == pages["input_#{ index }_page"]
+
+        previous = pages["input_#{ index }_page"]
+      end
+
+      session[:token] = @user.token
+    end
 
     respond_to do |format|
-      if @user.save
-        format.html { redirect_to statics_thanks_path, clear_storage: "localStorage.clear();" }
+      if @user.errors.blank?
+        format.html { redirect_to statics_thanks_path }
       else
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
