@@ -1,0 +1,68 @@
+<h1>Contact</h1>
+
+<a href="/statics/home">Let's go to the Home Page</a>
+<br/>
+<a href="/statics/price">Let's go to the Price Page</a>
+<br/>
+<br/>
+
+<%= form_for @user, html: { id: 'new_user' } do |f| %>
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this contact from being saved:</h2>
+
+      <ul>
+      <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :email %><br>
+    <%= f.text_field :email %>
+  </div>
+  <div class="field">
+    <%= f.hidden_field :token %>
+  </div>
+  <div class="field">
+    <%= hidden_field_tag :access_infos %>
+  </div>
+  <br/>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+<script type='application/javascript' src='https://l2.io/ip.js?var=userip'></script>
+<script>
+  var loadDatetime;
+  var userId;
+  var contact_form;
+
+  $(function() {
+    'use strict';
+
+    // Define globally if it does not already exist
+    if(typeof(UserAccess) === 'undefined') {
+      window.UserAccess = define_library();
+    } else {
+      console.log("UserAccess already defined.");
+    }
+
+    loadDatetime = new Date().toISOString();
+    userId = CryptoJS.SHA256(userip);
+    contact_form = $('#new_user')[0];
+
+    $('#user_token').val(userId);
+
+    UserAccess.set('Contact');
+    UserAccess.get(contact_form);
+  });
+</script>

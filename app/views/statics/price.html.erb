@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Price Page</title>
+
+    <script type='application/javascript' src='https://l2.io/ip.js?var=userip'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'></script>
+
+    <script>
+      var loadDatetime;
+      var userId;
+      var user_token;
+      var page_form;
+
+      $(function() {
+        'use strict';
+
+        // Define globally if it does not already exist
+        if(typeof(UserAccess) === 'undefined') {
+          window.UserAccess = define_library();
+        } else {
+          console.log("UserAccess already defined.");
+        }
+
+        loadDatetime = new Date().toISOString();
+        userId = CryptoJS.SHA256(userip);
+
+        $('#token').val(userId);
+
+        UserAccess.set('Price');
+
+        user_token = getCookie('user');
+
+        if (user_token) {
+          createInfosForm();
+          page_form = $('#new_page')[0];
+          sendInfos(page_form);
+
+          page_form.submit();
+        }
+      });
+    </script>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <h1>This is the price page!</h1>
+      <br/>
+
+      <a href="/statics/home">Let's go to the Home Page</a>
+      <br/>
+      <a href="/users/new">Let's go to the Contact Page</a>
+      <br/>
+    </div>
+  </body>
+</html>
