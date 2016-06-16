@@ -49,13 +49,13 @@ class UsersController < ApplicationController
     page = params[:user][:pages]
     @user = User.find_by(token: page['input_0_token'])
 
-    if @user.present
+    if !@user.blank?
       previous = @user.pages.last.page
 
       @user.pages.create(url: page["input_0_url"], date_time: page["input_0_dateTime"], page: page["input_0_page"]) unless previous == page["input_0_page"]
     end
 
-    render nothing: true
+    head :no_content
   end
 
 
