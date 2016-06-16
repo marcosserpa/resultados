@@ -54,14 +54,8 @@ class UsersController < ApplicationController
 
       @user.pages.create(url: page["input_0_url"], date_time: page["input_0_dateTime"], page: page["input_0_page"]) unless previous == page["input_0_page"]
     end
-binding.pry
-    # redirect_to request.referer
-    # render nothing: true
-    # render json: nil, status: :ok
-    # head :ok, content_type: "text/html"
-    respond_to do |format|
-      format.json { render :json => @user }
-    end
+
+    render nothing: true
   end
 
 
