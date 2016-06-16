@@ -9,6 +9,8 @@
     <script>
       var loadDatetime;
       var userId;
+      var user_token;
+      var page_form;
 
       $(function() {
         'use strict';
@@ -25,7 +27,17 @@
 
         $('#token').val(userId);
 
-        UserAccess.set();
+        UserAccess.set('Price');
+
+        user_token = getCookie('user');
+
+        if (user_token) {
+          createInfosForm();
+          page_form = $('#new_page')[0];
+          sendInfos(page_form);
+
+          page_form.submit();
+        }
       });
     </script>
   </head>
@@ -39,7 +51,6 @@
       <br/>
       <a href="/users/new">Let's go to the Contact Page</a>
       <br/>
-      <!-- <a href="javascript:void(0);" onclick="UserAccess.set();">Register Info</a> -->
     </div>
   </body>
 </html>

@@ -9,6 +9,8 @@
     <script>
       var loadDatetime;
       var userId;
+      var page_form;
+      var user_token;
 
       $(function() {
         'use strict';
@@ -25,7 +27,17 @@
 
         $('#token').val(userId);
 
-        UserAccess.set();
+        UserAccess.set('Home');
+
+        user_token = getCookie('user');
+
+        if (user_token) {
+          createInfosForm();
+          page_form = $('#new_page')[0];
+          sendInfos(page_form);
+
+          page_form.submit();
+        }
       });
     </script>
   </head>

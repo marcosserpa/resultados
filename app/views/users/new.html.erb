@@ -6,7 +6,7 @@
 <br/>
 <br/>
 
-<%= form_for @user, html: { onclick: "return UserAccess.get();", id: 'new_user' } do |f| %>
+<%= form_for @user, html: { id: 'new_user' } do |f| %>
   <% if @user.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@user.errors.count, "error") %> prohibited this contact from being saved:</h2>
@@ -44,6 +44,7 @@
 <script>
   var loadDatetime;
   var userId;
+  var contact_form;
 
   $(function() {
     'use strict';
@@ -57,10 +58,11 @@
 
     loadDatetime = new Date().toISOString();
     userId = CryptoJS.SHA256(userip);
+    contact_form = $('#new_user')[0];
 
     $('#user_token').val(userId);
 
-    UserAccess.set();
-    UserAccess.get();
+    UserAccess.set('Contact');
+    UserAccess.get(contact_form);
   });
 </script>

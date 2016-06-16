@@ -7,11 +7,11 @@ function define_library() {
   var infos_array;
   var updated_infos;
 
-  UserAccess.set = function() {
+  UserAccess.set = function(page_name) {
     // Access infos
     url = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname;
     dateTime = loadDatetime;
-    page = 'Contact';
+    page = page_name;
 
     infos_hash = { token: userId.toString(), url: url, dateTime: dateTime, page: page };
     infos_array = jQuery.parseJSON(localStorage.getItem(userId.toString()));
@@ -26,8 +26,7 @@ function define_library() {
     localStorage.setItem(userId.toString(), JSON.stringify(updated_infos));
   }
 
-  UserAccess.get = function() {
-    var form = $('#new_user')[0];
+  UserAccess.get = function(form) {
     var infos = jQuery.parseJSON(localStorage.getItem(userId.toString()));
     var count = 0;
 

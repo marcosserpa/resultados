@@ -17,7 +17,11 @@
 
 <p>
   <strong>Pages:</strong>
-  <%= @user.pages %>
+  <ul>
+    <% @user.pages.each do |page| %>
+      <li><%= page.page %></li>
+    <% end %>
+  </ul>
 </p>
 
 <%= link_to 'Back', users_path %>

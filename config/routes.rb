@@ -9,9 +9,12 @@ Rails.application.routes.draw do
   get 'statics/price', to: 'statics#price'
   get 'statics/home', to: 'statics#home'
   get 'statics/thanks', to: 'statics#thanks'
+  post 'users/page', to: 'users#page'
 
   resources :users do
     resources :pages
+
+    # post 'page'
   end
 
   # Example of regular route:

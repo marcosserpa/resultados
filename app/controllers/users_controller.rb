@@ -13,10 +13,10 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.find_or_initialize_by(token: user_params[:token])
+    @user = User.find_or_initialize_by(email: user_params[:email])
 
     if @user.new_record?
-      @user.email = user_params[:email]
+      @user.token = user_params[:token]
       @user.name = user_params[:name]
     end
 
@@ -31,7 +31,8 @@ class UsersController < ApplicationController
         previous = pages["input_#{ index }_page"]
       end
 
-      session[:token] = @user.token
+      session[:user] = @user.token
+      cookies[:user] = @user.token
     end
 
     respond_to do |format|
@@ -41,6 +42,25 @@ class UsersController < ApplicationController
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def page
+    page = params[:user][:pages]
+    @user = User.find_by(token: page['input_0_token'])
+
+    if @user.present
+      previous = @user.pages.last.page
+
+      @user.pages.create(url: page["input_0_url"], date_time: page["input_0_dateTime"], page: page["input_0_page"]) unless previous == page["input_0_page"]
+    end
+binding.pry
+    # redirect_to request.referer
+    # render nothing: true
+    # render json: nil, status: :ok
+    # head :ok, content_type: "text/html"
+    respond_to do |format|
+      format.json { render :json => @user }
     end
   end
 
